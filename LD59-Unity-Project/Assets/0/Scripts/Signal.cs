@@ -2,6 +2,28 @@ using UnityEngine;
 
 public class Signal : MonoBehaviour, IItem
 {
+	public SignalType signalType;
+	
+	public enum SignalType
+	{
+		arrowBlueUp,
+		arrowBlueDown,
+		arrowBlueLeft,
+		arrowBlueRight,
+		arrowRedUp,
+		arrowRedDown,
+		arrowRedLeft,
+		arrowRedRight,
+		arrowGreenUp,
+		arrowGreenDown,
+		arrowGreenLeft,
+		arrowGreenRight,
+		arrowYellowUp,
+		arrowYellowDown,
+		arrowYellowLeft,
+		arrowYellowRight,
+	}
+	
 	public static Signal CreateSignal(Signal signalPrefab, ISignalHolder siganlHolder)
 	{
 		Signal signal = Instantiate(signalPrefab);

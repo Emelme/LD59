@@ -7,6 +7,7 @@ public class G : MonoBehaviour
 	[Header("Prefabs")]
 	
 	public List<RoadTile> roadTilePrefabs;
+	public BasicCar basicCarPrefab;
 	
 	
 	[Header("Managers")]

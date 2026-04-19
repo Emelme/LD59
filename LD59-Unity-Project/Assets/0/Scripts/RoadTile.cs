@@ -20,6 +20,7 @@ public class RoadTile : MonoBehaviour, ISignalHolder, IItem, ICarHolder
 	private void Start()
 	{
 		signalHoldTransform = transform;
+		carHoldTransform = transform;
 	}
 
 	public static RoadTile CreateRoadTile(RoadTile roadTilePrefab, IRoadHolder roadHolder)

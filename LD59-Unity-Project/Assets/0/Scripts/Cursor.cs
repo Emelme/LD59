@@ -15,6 +15,7 @@ public class Cursor : MonoBehaviour, IRoadHolder, ISignalHolder
     private void Awake()
     {
         GameInput.Instance.OnLeftMouseButtonPerformed += HandleLeftClick;
+        GameInput.Instance.OnRightMouseButtonPerformed += HandleRightClick;
     }
 
     private void OnDestroy()
@@ -22,6 +23,7 @@ public class Cursor : MonoBehaviour, IRoadHolder, ISignalHolder
         if (GameInput.Instance != null)
         {
             GameInput.Instance.OnLeftMouseButtonPerformed -= HandleLeftClick;
+            GameInput.Instance.OnRightMouseButtonPerformed -= HandleRightClick;
         }
     }
 
@@ -35,6 +37,17 @@ public class Cursor : MonoBehaviour, IRoadHolder, ISignalHolder
         {
             UpdateGhostGrid();
         }
+    }
+
+    private void HandleRightClick(Vector2 mouseWorldPosition)
+    {
+        if (targetGrid == null) return;
+        if (!targetGrid.HasRoad()) return;
+
+        RoadTile road = targetGrid.GetRoad();
+        if (road.HasCar()) return;
+
+        BasicCar.CreateCar(G.i.basicCarPrefab, road);
     }
 
     private void HandleLeftClick(Vector2 mouseWorldPosition)
