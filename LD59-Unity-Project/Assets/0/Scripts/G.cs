@@ -44,7 +44,7 @@ public class G : MonoBehaviour
 		X
 	}
 	
-	public RoadTile getRoadTile(RoadTileType type)
+	public RoadTile GetRoadTile(RoadTileType type)
 	{
 		return roadTilePrefabs[(int)type];
 	}

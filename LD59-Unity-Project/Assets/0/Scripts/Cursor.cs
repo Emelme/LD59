@@ -4,7 +4,7 @@ public class Cursor : MonoBehaviour, IRoadHolder, ISignalHolder
 {
     public bool isSelectCursor = true;
 
-    public GridSystem targetGrid;
+    public RoadTileHolder targetGrid;
 
     public RoadTile roadTile;
     public Signal signal;
@@ -12,13 +12,62 @@ public class Cursor : MonoBehaviour, IRoadHolder, ISignalHolder
     public Transform roadTileHoldTransform;
     public Transform signalHoldTransform;
 
+    private void Awake()
+    {
+        GameInput.Instance.OnLeftMouseButtonPerformed += HandleLeftClick;
+    }
+
+    private void OnDestroy()
+    {
+        if (GameInput.Instance != null)
+        {
+            GameInput.Instance.OnLeftMouseButtonPerformed -= HandleLeftClick;
+        }
+    }
+
     private void Update()
     {
         transform.position = GameInput.Instance.GetMousePositionInWorld();
 
+        UpdateTargetGrid();
+
         if (!isSelectCursor)
         {
             UpdateGhostGrid();
+        }
+    }
+
+    private void HandleLeftClick(Vector2 mouseWorldPosition)
+    {
+        if (isSelectCursor)
+            return;
+
+        if (targetGrid == null)
+            return;
+
+        if (roadTile != null)
+        {
+            if (targetGrid.HasRoad())
+            {
+                Destroy(targetGrid.GetRoad().gameObject);
+                targetGrid.ClearRoad();
+            }
+
+            RoadTile.CreateRoadTile(roadTile, targetGrid);
+        }
+
+        if (signal != null)
+        {
+            if (targetGrid.HasRoad())
+            {
+                if (targetGrid.GetRoad().HasSignal())
+                {
+                    Destroy(targetGrid.GetRoad().GetSignal().gameObject);
+                    targetGrid.GetRoad().ClearSignal();
+                }
+            }
+
+            Signal.CreateSignal(signal, targetGrid.GetRoad());
         }
     }
 
@@ -47,6 +96,12 @@ public class Cursor : MonoBehaviour, IRoadHolder, ISignalHolder
                 signal.GetSpriteRotation()
             );
         }
+    }
+
+    public void UpdateTargetGrid()
+    {
+        G.i.firstRoadGrid.GetXY(transform.position, out int x, out int y);
+        targetGrid = (RoadTileHolder)G.i.firstRoadGrid.GetTile(x, y);
     }
 
     public void SetItem(IItem item)
